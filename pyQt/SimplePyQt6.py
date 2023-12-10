@@ -7,7 +7,7 @@ def main():
 
     w = QWidget()
     w.resize(250, 200)
-    w.move(300, 300)
+    w.move()
 
     w.setWindowTitle('Simple')
     w.show()
