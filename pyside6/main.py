@@ -22,7 +22,6 @@ class MainWindow(QMainWindow):
 
         self.bind()
 
-    # TODO 最后的操作
     def confirm(self):
         my_signal.setProgressBar.emit(0)
         my_signal.setProgressBar_2.emit(0)
@@ -31,7 +30,6 @@ class MainWindow(QMainWindow):
         delayed_thread.daemon = True  # 设置该线程为守护线程
         delayed_thread.start()  # 开启线程
 
-    # TODO 给确定按钮绑定事件
     def bind(self):
         self.ui.pushButton.clicked.connect(self.confirm)
         my_signal.setProgressBar.connect(self.set_progressBar)
@@ -51,7 +49,6 @@ class MainWindow(QMainWindow):
     def set_progressBar(self, progress: int):
         self.ui.progressBar.setValue(progress)
 
-    # TODO 发送消息
     def send_msg(self):
         self.show_delayed_progress()
         cs = ControlSending(
@@ -62,12 +59,10 @@ class MainWindow(QMainWindow):
         )
         cs.send_data()
 
-    # TODO 更新时间
     def update_time(self):
         # self.ui.label_7.setText(QTime.currentTime().toString('hh:mm:ss'))
         my_signal.setLabel_7.emit(QTime.currentTime().toString('hh:mm:ss'))
 
-    # TODO 延时时间进度条显示
     def show_delayed_progress(self):
         # 获取延时时间
         time_cost = self.ui.timeEdit.text()
