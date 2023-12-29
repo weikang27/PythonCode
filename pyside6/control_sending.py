@@ -1,6 +1,4 @@
 from uiautomation import WindowControl  # 引入uiautomation库中的WindowControl类，用来进行图像识别和模拟操作
-from time import sleep
-import numpy as np
 from Signal import my_signal
 
 
@@ -33,7 +31,6 @@ class ControlSending():
             wx.SendKeys(self.data.replace('\n', '{Shift}{Enter}') + '{Enter}')
             progress = (i + 1) * 100 // self.count
             my_signal.setProgressBar.emit(progress)
-        # my_signal.setProgressBar.emit(100)
 
 
 if __name__ == '__main__':
