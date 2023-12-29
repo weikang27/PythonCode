@@ -13,7 +13,7 @@ from Signal import my_signal
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
-        self.ui = Ui_MainWindow()  # UI类的实例化()
+        self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
         self.timer = QTimer()
@@ -25,10 +25,10 @@ class MainWindow(QMainWindow):
     def confirm(self):
         my_signal.setProgressBar.emit(0)
         my_signal.setProgressBar_2.emit(0)
-        # 创建一个子线程执行 延时时间进度条显示
+
         delayed_thread = threading.Thread(target=self.send_msg)
-        delayed_thread.daemon = True  # 设置该线程为守护线程
-        delayed_thread.start()  # 开启线程
+        delayed_thread.daemon = True
+        delayed_thread.start()
 
     def bind(self):
         self.ui.pushButton.clicked.connect(self.confirm)
@@ -52,38 +52,32 @@ class MainWindow(QMainWindow):
     def send_msg(self):
         self.show_delayed_progress()
         cs = ControlSending(
-            data=self.ui.textEdit.toPlainText(),  # 获取输入内容的文本信息
-            somebody=self.ui.lineEdit.text(),  # 获取输入名字的信息
-            count=self.ui.spinBox.value(),  # 获取循环次数信息
-            time_cost=self.ui.timeEdit.text()  # 获取延迟时间信息
+            data=self.ui.textEdit.toPlainText(),
+            somebody=self.ui.lineEdit.text(),
+            count=self.ui.spinBox.value(),
+            time_cost=self.ui.timeEdit.text()
         )
         cs.send_data()
 
     def update_time(self):
-        # self.ui.label_7.setText(QTime.currentTime().toString('hh:mm:ss'))
         my_signal.setLabel_7.emit(QTime.currentTime().toString('hh:mm:ss'))
 
     def show_delayed_progress(self):
-        # 获取延时时间
         time_cost = self.ui.timeEdit.text()
         sum_second = int(time_cost[-2:]) + int(time_cost[3:5]) * 60 + int(time_cost[:2]) * 3600
         print(sum_second)
-        # 计算发送时间
         time_2 = datetime.strptime(time_cost, '%H:%M:%S')
         total_time = (datetime.strptime(self.ui.label_7.text(), '%H:%M:%S')
                       + timedelta(hours=time_2.hour, minutes=time_2.minute, seconds=time_2.second))
-        # self.ui.label_9.setText(str(total_time.strftime('%H:%M:%S')))
-        #
         my_signal.setLabel_9.emit(str(total_time.strftime('%H:%M:%S')))
         for i in range(sum_second):
             sleep(1)
             progress = (i + 1) * 100 // sum_second
-            # self.ui.progressBar_2.setValue(progress)
             my_signal.setProgressBar_2.emit(progress)
 
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)  # 启动一个应用
-    window = MainWindow()  # 实例化主窗口
-    window.show()  # 展示主窗口
-    sys.exit(app.exec())  # 避免程序执行到这一行后直接退出
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec())
